@@ -2,9 +2,13 @@ package br.com.jonashcr.linkshortener.services;
 
 import br.com.jonashcr.linkshortener.domain.shortlink.ShortLink;
 import br.com.jonashcr.linkshortener.repositories.ShortLinkRepository;
+import br.com.jonashcr.linkshortener.infra.exceptions.InvalidUrlException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @Service
 public class ShortLinkService {
@@ -13,6 +17,8 @@ public class ShortLinkService {
     private ShortLinkRepository shortLinkRepository;
 
     public ShortLink createShortLink(String originalUrl) {
+        validateUrl(originalUrl);
+
         try {
             ShortLink shortLink = new ShortLink();
             shortLink.setOriginalUrl(originalUrl);
@@ -22,6 +28,14 @@ public class ShortLinkService {
             throw new RuntimeException("URL já cadastrada.");
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void validateUrl(String url) {
+        try {
+            new URL(url);
+        } catch (MalformedURLException e) {
+            throw new InvalidUrlException("URL inválida. Por favor, insira uma URL válida.");
         }
     }
 
