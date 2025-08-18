@@ -43,6 +43,10 @@ public class ShortLinkService {
         return Integer.toHexString(originalUrl.hashCode());
     }
 
+    public Iterable<ShortLink> getAllLinks() {
+        return shortLinkRepository.findAll();
+    }
+
     public ShortLink getByCode(String shortCode) {
         return shortLinkRepository.findByShortCode(shortCode)
                 .orElseThrow(() -> new RuntimeException("Short link não encontrado."));
