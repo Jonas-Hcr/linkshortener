@@ -37,6 +37,12 @@ public class ShortLinkController {
         return ResponseEntity.ok(shortLinkDTO);
     }
 
+    @GetMapping("/api/links")
+    public ResponseEntity<Iterable<ShortLink>> getAllLinks() {
+        Iterable<ShortLink> links = service.getAllLinks();
+        return ResponseEntity.ok(links);
+    }
+
     @GetMapping("/{shortCode}")
     public void redirect(@PathVariable String shortCode, HttpServletRequest req, HttpServletResponse res) throws IOException {
         if (req.getMethod().equalsIgnoreCase("HEAD")) {
